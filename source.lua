@@ -19,8 +19,6 @@ local function getService(name)
     return if cloneref then cloneref(service) else service
 end
 
--- Loads and executes a function hosted on a remote URL. Cancels the request if the requested URL takes too long to respond.
--- Errors with the function are caught and logged to the output
 local function loadWithTimeout(url: string, timeout: number?): ...any
     assert(type(url) == "string", "Expected string, got " .. type(url))
     timeout = timeout or 5
@@ -28,17 +26,16 @@ local function loadWithTimeout(url: string, timeout: number?): ...any
     local success, result = false, nil
 
     local requestThread = task.spawn(function()
-        local fetchSuccess, fetchResult = pcall(game.HttpGet, game, url) -- game:HttpGet(url)
-        -- If the request fails the content can be empty, even if fetchSuccess is true
+        local fetchSuccess, fetchResult = pcall(game.HttpGet, game, url)
         if not fetchSuccess or #fetchResult == 0 then
             if #fetchResult == 0 then
-                fetchResult = "Empty response" -- Set the error message
+                fetchResult = "Empty response"
             end
             success, result = false, fetchResult
             requestCompleted = true
             return
         end
-        local content = fetchResult -- Fetched content
+        local content = fetchResult
         local execSuccess, execResult = pcall(function()
             return loadstring(content)()
         end)
@@ -53,11 +50,9 @@ local function loadWithTimeout(url: string, timeout: number?): ...any
         end
     end)
 
-    -- Wait for completion or timeout
     while not requestCompleted do
         task.wait()
     end
-    -- Cancel timeout thread if still running when request completes
     if coroutine.status(timeoutThread) ~= "dead" then
         task.cancel(timeoutThread)
     end
@@ -67,7 +62,7 @@ local function loadWithTimeout(url: string, timeout: number?): ...any
     return if success then result else nil
 end
 
-local requestsDisabled = true --getgenv and getgenv().DISABLE_RYZENHUB_REQUESTS
+local requestsDisabled = true
 local InterfaceBuild = '3K3W'
 local Release = "Build 1.68"
 local RyzenHubFolder = "RyzenHub"
@@ -82,7 +77,7 @@ local settingsTable = {
     }
 }
 
-local overriddenSettings = {} -- For example, overriddenSettings["System.ryzenhubOpen"] = "J"
+local overriddenSettings = {}
 
 local function overrideSetting(category: string, name: string, value: any)
     overriddenSettings[`{category}.{name}`] = value
@@ -108,14 +103,12 @@ local useStudio = RunService:IsStudio() or false
 local settingsCreated = false
 local settingsInitialized = false
 local cachedSettings
-local prompt = useStudio and require(script.Parent.prompt) or loadWithTimeout('https://raw.githubusercontent.com/RyzenSoftwareLtd/RyzenHub/refs/heads/request/prompt.lua')
+local prompt = useStudio and require(script.Parent.prompt) or loadWithTimeout('https://raw.githubusercontent.com/Ryzen-hub-dev/99-night-in-the-forset/refs/heads/main/propmt.lua')
 local requestFunc = (syn and syn.request) or (fluxus and fluxus.request) or (http and http.request) or http_request or request
 
 if not prompt and not useStudio then
     warn("Failed to load prompt library, using fallback")
-    prompt = {
-        create = function() end -- No-op fallback
-    }
+    prompt = {create = function() end}
 end
 
 local function loadSettings()
@@ -366,11 +359,15 @@ local function CreateWindow(Settings)
     end
 
     local RyzenHub = game:GetObjects("rbxassetid://12364179275")[1]
+    if not RyzenHub then
+        warn("Failed to load RyzenHub GUI asset")
+        return nil
+    end
     RyzenHub.Enabled = false
 
     if gethui then
         RyzenHub.Parent = gethui()
-    elseif syn.protect_gui then 
+    elseif syn and syn.protect_gui then 
         syn.protect_gui(RyzenHub)
         RyzenHub.Parent = CoreGui
     elseif not useStudio and CoreGui:FindFirstChild("RobloxGui") then
@@ -448,17 +445,19 @@ local function CreateWindow(Settings)
     }
 
     local CloseButton = RyzenHub.Main.WindowClass.Topbar:FindFirstChild("CloseButton")
-    local success, err = pcall(function()
-        if CloseButton then
+    if CloseButton then
+        local success, err = pcall(function()
             CloseButton.MouseButton1Click:Connect(function()
                 if RyzenHub.Opened then
                     RyzenHub:Destroy()
                 end
             end)
+        end)
+        if not success then
+            warn("Error with CloseButton: ", err)
         end
-    end)
-    if not success then
-        warn("Error with CloseButton: ", err)
+    else
+        warn("CloseButton not found in GUI structure")
     end
 
     function RyzenHubLibrary:Notify(Properties)
@@ -468,6 +467,10 @@ local function CreateWindow(Settings)
         local image = Properties.Image or 4483362458
 
         local Notification = RyzenHubLibrary.Elements.Template.Notification:Clone()
+        if not Notification then
+            warn("Notification template not found")
+            return
+        end
         Notification.Parent = RyzenHubLibrary.Load.Notifications
         Notification.Name = title
         Notification.Enabled = true
@@ -589,7 +592,7 @@ local WindowSettings = {
     },
     Discord = {
         Enabled = true,
-        Invite = "https://discord.gg/ryzenhub",
+        Invite = "https://discord.gg/QyywQ67c",
         ShowInvite = true,
     },
     KeySystem = true,
@@ -597,7 +600,7 @@ local WindowSettings = {
         Title = "Ryzen Hub Key",
         Subtitle = "Key System",
         Note = "Join the discord for more information.",
-        Key = "RyzenHubKeyHere",
+        Key = "jotoro",
     }
 }
 
