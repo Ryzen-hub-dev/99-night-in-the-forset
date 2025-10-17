@@ -1,10 +1,5 @@
--- Ryzen Hub Boosts
--- ryzenhub.menu/privacy | ryzenhub.menu/terms
-
--- Unsupported Executors
-
 local exec = identifyexecutor and identifyexecutor() or 'No Executor'
-local unsupported = {'delta', 'cryptic', 'arm64'}
+local unsupported = {'delta'}
 
 for _, keyword in pairs(unsupported) do
 	if string.find(keyword, string.lower(exec)) then
