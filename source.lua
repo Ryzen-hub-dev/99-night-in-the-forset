@@ -1,15 +1,3 @@
---[[
-
-	Ryzen Hub Interface Suite
-	by Ryzen Team
-
-	shlex  | Designing + Programming
-	iRay   | Programming
-	Max    | Programming
-	Damian | Programming
-
-]]
-
 if debugX then
 	warn('Initialising Ryzen Hub')
 end
