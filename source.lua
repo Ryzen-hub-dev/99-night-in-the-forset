@@ -118,7 +118,7 @@ local useStudio = RunService:IsStudio() or false
 local settingsCreated = false
 local settingsInitialized = false -- Whether the UI elements in the settings page have been set to the proper values
 local cachedSettings
-local prompt = useStudio and require(script.Parent.prompt) or loadWithTimeout('https://raw.githubusercontent.com/Ryzen-hub-dev/99-night-in-the-forset/refs/heads/main/propmt.lua')
+local prompt = useStudio and require(script.Parent.prompt) or loadWithTimeout('https://raw.githubusercontent.com/RyzenSoftwareLtd/RyzenHub/refs/heads/request/prompt.lua')
 local requestFunc = (syn and syn.request) or (fluxus and fluxus.request) or (http and http.request) or http_request or request
 
 -- Validate prompt loaded correctly
@@ -373,7 +373,7 @@ end
 local function InValidWorkspace()
 	local success, Value = pcall(function()
 		local WorkspaceChildren = workspace:GetChildren()
-		return WorkspaceChildren[1].Name == "Rayfield-Main" or nil
+		return WorkspaceChildren[1].Name == "RyzenHub-Main" or nil
 	end)
 
 	return success
@@ -397,32 +397,32 @@ local function CreateWindow(Settings)
 		writefile(ConfigurationFolder.."/"..Settings.ConfigurationSaving.FileName..ConfigurationExtension, decodedtable)
 	end
 
-	local Rayfield = game:GetObjects("rbxassetid://12364179275")[1]
-	Rayfield.Enabled = false
+	local RyzenHub = game:GetObjects("rbxassetid://12364179275")[1]
+	RyzenHub.Enabled = false
 
 	if gethui then
-		Rayfield.Parent = gethui()
+		RyzenHub.Parent = gethui()
 	elseif syn.protect_gui then 
-		syn.protect_gui(Rayfield)
-		Rayfield.Parent = CoreGui
+		syn.protect_gui(RyzenHub)
+		RyzenHub.Parent = CoreGui
 	elseif not useStudio and CoreGui:FindFirstChild("RobloxGui") then
-		Rayfield.Parent = CoreGui:FindFirstChild("RobloxGui")
+		RyzenHub.Parent = CoreGui:FindFirstChild("RobloxGui")
 	else
-		Rayfield.Parent = CoreGui
+		RyzenHub.Parent = CoreGui
 	end
 
 	if gethui and not useStudio then
 		for _, Interface in ipairs(gethui():GetChildren()) do
-			if Interface.Name == Rayfield.Name and Interface ~= Rayfield then
+			if Interface.Name == RyzenHub.Name and Interface ~= RyzenHub then
 				Interface.Enabled = false
-				Interface.Name = "Rayfield-Old"
+				Interface.Name = "RyzenHub-Old"
 			end
 		end
 	else
 		for _, Interface in ipairs(CoreGui:GetChildren()) do
-			if Interface.Name == Rayfield.Name and Interface ~= Rayfield then
+			if Interface.Name == RyzenHub.Name and Interface ~= RyzenHub then
 				Interface.Enabled = false
-				Interface.Name = "Rayfield-Old"
+				Interface.Name = "RyzenHub-Old"
 			end
 		end
 	end
@@ -433,7 +433,7 @@ local function CreateWindow(Settings)
 
 	local Window = {}
 
-	Rayfield.DisplayOrder = 100
+	RyzenHub.DisplayOrder = 100
 
 	-- UI Settings
 	RyzenHubLibrary.Flags[Settings.ConfigurationSaving.FileName] = {}
@@ -441,22 +441,22 @@ local function CreateWindow(Settings)
 
 	local WindowSettings = RyzenHubLibrary.Flags[Settings.ConfigurationSaving.FileName]
 
-	Rayfield.Main.WindowClass.MainFrame.UIPadding.PaddingTop = UDim.new(0,UISettingsPadding)
-	Rayfield.Main.WindowClass.MainFrame.UIPadding.PaddingLeft = UDim.new(0,UISettingsPadding)
-	Rayfield.Main.WindowClass.MainFrame.UIPadding.PaddingRight = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.MainFrame.UIPadding.PaddingTop = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.MainFrame.UIPadding.PaddingLeft = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.MainFrame.UIPadding.PaddingRight = UDim.new(0,UISettingsPadding)
 
-	Rayfield.Main.WindowClass.Topbar.UIPadding.PaddingTop = UDim.new(0,UISettingsPadding)
-	Rayfield.Main.WindowClass.Topbar.UIPadding.PaddingLeft = UDim.new(0,UISettingsPadding)
-	Rayfield.Main.WindowClass.Topbar.UIPadding.PaddingRight = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.Topbar.UIPadding.PaddingTop = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.Topbar.UIPadding.PaddingLeft = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.Topbar.UIPadding.PaddingRight = UDim.new(0,UISettingsPadding)
 
-	Rayfield.Main.WindowClass.Topbar.TopbarTitle.UIPadding.PaddingLeft = UDim.new(0,UISettingsPadding)
+	RyzenHub.Main.WindowClass.Topbar.TopbarTitle.UIPadding.PaddingLeft = UDim.new(0,UISettingsPadding)
 
-	Rayfield.Main.WindowClass.Topbar.TopbarTitle.Text = Settings.Name
-	Rayfield.Main.WindowClass.Size = UDim2.fromOffset(UISettings.TabWidth + (UISettingsPadding * 3) + 1, 38)
+	RyzenHub.Main.WindowClass.Topbar.TopbarTitle.Text = Settings.Name
+	RyzenHub.Main.WindowClass.Size = UDim2.fromOffset(UISettings.TabWidth + (UISettingsPadding * 3) + 1, 38)
 
 	local NotificationStoryboard = Instance.new("Frame")
 	NotificationStoryboard.Name = "NotificationStoryboard"
-	NotificationStoryboard.Parent = Rayfield
+	NotificationStoryboard.Parent = RyzenHub
 	NotificationStoryboard.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	NotificationStoryboard.BackgroundTransparency = 1
 	NotificationStoryboard.ClipsDescendants = true
@@ -478,244 +478,81 @@ local function CreateWindow(Settings)
 	NotificationStoryboardUIPadding.PaddingBottom = UDim.new(0, 15)
 	NotificationStoryboardUIPadding.PaddingRight = UDim.new(0, 15)
 
-	Rayfield.Main.BackgroundColor3 = ResolveColor("Background")
-	Rayfield.Main.WindowClass.Topbar.BackgroundColor3 = ResolveColor("Topbar")
-	Rayfield.Main.WindowClass.Shadow.Image.ImageColor3 = ResolveColor("Shadow")
+	RyzenHubLibrary.Load = {
+		Main = RyzenHub,
+		LoadingFrame = RyzenHub.LoadingFrame,
+		Notifications = NotificationStoryboard
+	}
 
-	Rayfield.Main.WindowClass.Topbar.Line.BackgroundColor3 = ResolveColor("TabStroke")
-	Rayfield.Main.WindowClass.Topbar.TopbarTitle.TextColor3 = ResolveColor("TextColor")
-
-	Rayfield.Main.WindowClass.Tab.List.BackgroundColor3 = ResolveColor("TabBackground")
-	Rayfield.Main.WindowClass.Tab.List.UIStroke.Color = ResolveColor("TabStroke")
-
-	Rayfield.Main.WindowClass.Tab.ContainerHolder.BackgroundColor3 = ResolveColor("Background")
-
-
-	Rayfield.Main.WindowClass.Topbar.TopbarTitle.Text = Settings.Name
-	Rayfield.Main.Shadow.Image.ImageColor3 = GetOptionValue("Shadow")
-	Rayfield.Main.Shadow.Image.ImageTransparency = 0.4
-
-	Rayfield.Main.Topbar.CornerRepair.BackgroundColor3 = GetOptionValue("Topbar")
-	Rayfield.Main.Topbar.Divider.BackgroundColor3 = GetOptionValue("Topbar")
-
-	Rayfield.Main.Topbar.TopbarTitle.TextColor3 = GetOptionValue("TextColor")
-	Rayfield.Main.Topbar.TopbarTitle.TextTransparency = 0
-
-	Rayfield.Main.Topbar.Hide.ImageColor3 = GetOptionValue("TextColor")
-	Rayfield.Main.Topbar.Hide.ImageTransparency = 0
-
-	Rayfield.Main.Topbar.Minimize.ImageColor3 = GetOptionValue("TextColor")
-	Rayfield.Main.Topbar.Minimize.ImageTransparency = 0
-
-	for _, TopbarButton in ipairs(Rayfield.Main.Topbar:GetChildren()) do
-		if TopbarButton.ClassName == "ImageButton" then
-			TopbarButton.Size = UDim2.fromOffset(20, 20)
-			TopbarButton.ImageColor3 = GetOptionValue("TextColor")
-			TopbarButton.ImageTransparency = 0
+	CloseButton.MouseButton1Click:Connect(function()
+		if RyzenHub.Opened then
+			RyzenHub:Destroy()
 		end
-	end
+	end)
 
-	if Settings.Discord.Enabled and Settings.Discord.RememberJoins then -- We do funny work-arounds because the developer is nothing but a big old meanie who doesn't fit to their own style conventions!
-		RyzenHubLibrary.Options.Discord.RememberJoins = false
-	end
+	function RyzenHubLibrary:Notify(Properties)
+		local title = Properties.Title or "Notification"
+		local content = Properties.Content or "Content"
+		local duration = Properties.Duration or 5
+		local image = Properties.Image or 4483362458
 
-	if Settings.Discord.Enabled and Settings.Discord.InvitedUser then
-		RyzenHubLibrary.Options.Discord.InvitedUser = false
-	end
-
-	if Settings.KeySystem then
-		if not Settings.KeySettings then
-			prompt and prompt.create(
-				'Invalid Key Settings',
-				'Please set KeySettings.Title, KeySettings.Subtitle, KeySettings.NoteMessage, KeySettings.MaxAttempts, KeySettings.KeyList, and KeySettings.Callback to proper values in order to use a key system.',
-				'Okay',
-				'',
-				function() end
-			)
-			Rayfield:Destroy()
-			return
-		end
-
-		local KeyNote = Settings.KeySettings.NoteMessage
-		local KeyPlaceholder = Settings.KeySettings.Subtitle
-		local KeyTitle = Settings.KeySettings.Title
-		local KeySettingsCallback = Settings.KeySettings.Callback
-		local KeyList = Settings.KeySettings.KeyList
-		local KeyMaxAttempts = Settings.KeySettings.MaxAttempts or 3
-		local KeyAttempts = 0
-
-		local KeyUI = game:GetObjects("rbxassetid://12364179275")[1]
-		KeyUI.Name = "KeyUI"
-		KeyUI.Parent = Rayfield
-
-		KeyUI.KeyboxFrame.Keybox.PlaceholderText = KeyPlaceholder
-		KeyUI.Title.Text = KeyTitle
-		KeyUI.NoteMessage.Text = KeyNote
-
-		KeyUI.KeyboxFrame.Keybox.FocusLost:Connect(function()
-			if #KeyUI.KeyboxFrame.Keybox.Text == 0 then
-				tweenService:Create(KeyUI.KeyboxFrame.Keybox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {BackgroundColor3 = Color3.fromRGB(30, 30, 30)}):Play()
-				tweenService:Create(KeyUI.KeyboxFrame.Keybox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(64, 64, 64)}):Play()
-				KeyUI.KeyboxFrame.Keybox.PlaceholderColor3 = Color3.fromRGB(64, 64, 64)
-			end
-		end)
-
-		KeyUI.KeyboxFrame.Keybox:GetPropertyChangedSignal("Text"):Connect(function()
-			KeyUI.KeyboxFrame.Keybox.Text = KeyUI.KeyboxFrame.Keybox.Text:sub(1, 29)
-		end)
-
-		KeyUI.KeyboxFrame.Keybox.Focused:Connect(function()
-			tweenService:Create(KeyUI.KeyboxFrame.Keybox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {BackgroundColor3 = Color3.fromRGB(37, 37, 37)}):Play()
-			tweenService:Create(KeyUI.KeyboxFrame.Keybox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
-			KeyUI.KeyboxFrame.Keybox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
-		end)
-
-		KeyUI.KeyboxFrame.Keybox.FocusLost:Connect(function(enterPressed)
-			if enterPressed then
-				local KeyFound = false
-				local Key = KeyUI.KeyboxFrame.Keybox.Text
-				if table.find(KeyList, Key) then
-					KeyFound = true
-				end
-
-				if KeyFound then
-					KeyAttempts = 0
-					KeySettingsCallback(true, Key)
-					KeyUI:Destroy()
-				else
-					KeyAttempts = KeyAttempts + 1
-					if KeyAttempts >= KeyMaxAttempts then
-						KeyUI:Destroy()
-						KeySettingsCallback(false)
-						game:Shutdown()
-					else
-						KeyUI.KeyboxFrame.Keybox.Text = ""
-						KeyUI.KeyboxFrame.Keybox.PlaceholderText = "Invalid Key"
-						task.wait(1)
-						KeyUI.KeyboxFrame.Keybox.PlaceholderText = KeyPlaceholder
-					end
-				end
-			end
-		end)
-
-		KeyUI.InputBegan:Connect(function(input)
-			if input.KeyCode == Enum.KeyCode.Escape then
-				KeyUI:Destroy()
-				KeySettingsCallback(false)
-				game:Shutdown()
-			end
-		end)
-	else
-		Rayfield.Enabled = true
-	end
-
-	-- Set Flags
-	local WindowFunction = {}
-
-	function WindowFunction:Notify(NotificationSettings)
-		local ActionCompleted = true
-		local Notification = Rayfield.Notification:Clone()
-		Notification.Parent = NotificationStoryboard
-		Notification.Name = NotificationSettings.Title or "Unknown Title"
+		local Notification = RyzenHubLibrary.Elements.Template.Notification:Clone()
+		Notification.Parent = RyzenHubLibrary.Load.Notifications
+		Notification.Name = title
 		Notification.Enabled = true
 
-		Notification.Title.Text = NotificationSettings.Title or "Unknown Title"
-		Notification.Description.Text = NotificationSettings.Content or "Unknown Content"
-		if NotificationSettings.Image then
-			Notification.Icon.Image = "rbxassetid://"..tostring(NotificationSettings.Image)
-		else
-			Notification.Icon.Image = "rbxassetid://4483345998"
-		end
+		Notification.Title.Text = title
+		Notification.Content.Text = content
+		Notification.Image.Image = image
 
 		Notification.Title.TextTransparency = 1
-		Notification.Description.TextTransparency = 1
-		Notification.Title.TextColor3 = GetOptionValue("TextColor")
-		Notification.Description.TextColor3 = GetOptionValue("TextColor")
-		Notification.Icon.ImageColor3 = GetOptionValue("TextColor")
-		Notification.Icon.ImageTransparency = 1
+		Notification.Content.TextTransparency = 1
+		Notification.Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Notification.Content.TextColor3 = Color3.fromRGB(200, 200, 200)
+		Notification.Image.ImageColor3 = Color3.fromRGB(0, 255, 150)
+		Notification.Image.ImageTransparency = 1
 
-		if NotificationSettings.Actions then
-			for ActionName, ActionSettings in NotificationSettings.Actions do
-				local Action = Notification.Actions.Action:Clone()
-				Action.Name = ActionName or "Action"
-				Action.Enabled = true
-				Action.Parent = Notification.Actions
-				Action.Text = ActionSettings.Name or "Action"
-				Action.BackgroundColor3 = GetOptionValue("Background")
-				Action.TextColor3 = GetOptionValue("TextColor")
-				Action.BackgroundTransparency = 1
-				Action.TextTransparency = 1
-				Action.BackgroundTransparency = 1
-
-				Action.MouseButton1Click:Connect(function()
-					local Success = pcall(ActionSettings.Callback)
-					if not Success then
-						print("Ryzen Hub | Action: "..ActionName.." Callback Error ".."Updating Ryzen Hub may fix this issue")
-					else
-						print("Ryzen Hub | Action: "..ActionName.." Callback Success")
-					end
-				end)
-			end
-		else
-			Notification.Actions:Destroy()
-		end
-
-		Notification.BackgroundColor3 = GetOptionValue("Background")
+		Notification.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 		Notification.BackgroundTransparency = 1
 
-		Notification.Size = UDim2.fromOffset(295, Notification.UIListLayout.AbsoluteContentSize.Y + 10)
-		Notification.Position = UDim2.fromOffset(915, 80)
-		Notification.Position = UDim2.fromOffset(-500, Notification.Position.Y.Offset)
+		Notification.Size = UDim2.new(0, 400, 0, 100)
+		Notification.Position = UDim2.new(0, -400, 0, 0)
 
-		TweenService:Create(Notification, TweenInfo.new(0.7, Enum.EasingStyle.Quint), {Position = UDim2.fromOffset(0, Notification.Position.Y.Offset)}):Play()
+		tweenService:Create(Notification, TweenInfo.new(0.7, Enum.EasingStyle.Quint), {Position = UDim2.new(0, 0, 0, 0)}):Play()
 		task.wait(0.3)
-		TweenService:Create(Notification, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.3}):Play()
+		tweenService:Create(Notification, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.2}):Play()
 		task.wait(0.1)
-		TweenService:Create(Notification.Title, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
-		TweenService:Create(Notification.Description, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.1}):Play()
-		TweenService:Create(Notification.Icon, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0.2}):Play()
+		tweenService:Create(Notification.Title, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
+		tweenService:Create(Notification.Content, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.1}):Play()
+		tweenService:Create(Notification.Image, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0.2}):Play()
 
-		for _, Action in ipairs(Notification.Actions:GetChildren()) do
-			if Action:IsA("TextButton") and Action.Name ~= "Template" then
-				TweenService:Create(Action, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.45}):Play()
-				TweenService:Create(Action, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.1}):Play()
-			end
-		end
+		task.wait(duration)
 
-		task.wait(NotificationSettings.Duration or NotificationSettings.Delay or 5)
-
-		TweenService:Create(Notification.Title, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
-		TweenService:Create(Notification.Description, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.5}):Play()
-		TweenService:Create(Notification.Icon, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
-
-		for _, Action in ipairs(Notification.Actions:GetChildren()) do
-			if Action:IsA("TextButton") and Action.Name ~= "Template" then
-				TweenService:Create(Action, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				TweenService:Create(Action, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
-			end
-		end
+		tweenService:Create(Notification.Title, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
+		tweenService:Create(Notification.Content, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.5}):Play()
+		tweenService:Create(Notification.Image, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
 
 		task.wait(0.2)
 
-		TweenService:Create(Notification, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+		tweenService:Create(Notification, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
 
 		task.wait(0.3)
-		Notification:TweenPosition(UDim2.new(2, 0, Notification.Position.Y.Scale, Notification.Position.Y.Offset), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0.3, true)
+		Notification:TweenPosition(UDim2.new(1, 0, Notification.Position.Y.Scale, Notification.Position.Y.Offset), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0.3, true)
 		task.wait(0.35)
 		Notification:Destroy()
 	end
 
-	function WindowFunction:LoadConfiguration()
+	function RyzenHubLibrary:LoadConfiguration()
 		if Settings.ConfigurationSaving.Enabled then
 			local success, encodedtable = pcall(function()
 				return HttpService:JSONDecode(readfile(ConfigurationFolder.."/"..Settings.ConfigurationSaving.FileName..ConfigurationExtension))
 			end)
 
 			if success and type(encodedtable) == "table" then
-				for _, Tab in ipairs(Rayfield.Main.TabList:GetChildren()) do
+				for _, Tab in ipairs(RyzenHub.Main.TabList:GetChildren()) do
 					if Tab.ClassName == "Frame" then
 						for _, Section in ipairs(Tab.SectionList:GetChildren()) do
-							if Section.ClassName == "Frame" then
+							if Section.ClassName = "Frame" then
 								for _, Element in ipairs(Section.Elements.Container:GetChildren()) do
 									if Element.ClassName == "Frame" and Element:FindFirstChild("ElementFlag") then
 										local Flag = Element.ElementFlag.Value
@@ -756,322 +593,15 @@ local function CreateWindow(Settings)
 		end
 	end
 
-	function WindowFunction:SaveConfiguration()
-		if Settings.ConfigurationSaving.Enabled then
-			local sub = ""
-			if Settings.ConfigurationSaving.FolderName then
-				sub = Settings.ConfigurationSaving.FolderName.."/"
-			end
-			local encodedtable = HttpService:JSONEncode(RyzenHubLibrary.Flags)
-			writefile(ConfigurationFolder.."/"..sub..Settings.ConfigurationSaving.FileName..ConfigurationExtension, encodedtable)
-		end
-	end
+	task.delay(4, function()
+		RyzenHubLibrary:LoadConfiguration()
+		if RyzenHub.Main:FindFirstChild('Notice') and RyzenHub.Main.Notice.Visible then
+			TweenService:Create(RyzenHub.Main.Notice, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 100, 0, 25), Position = UDim2.new(0.5, 0, 0, -100), BackgroundTransparency = 1}):Play()
+			TweenService:Create(RyzenHub.Main.Notice.Title, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {TextTransparency = 1}):Play()
 
-	function WindowFunction:Unload()
-		for _, unloadCallback in ipairs(RyzenHubLibrary.Signals) do
-			if unloadCallback then
-				local success, err = pcall(unloadCallback)
-				if not success then
-					pcall(function()
-						warn("Ryzen Hub | Unload Error: "..err)
-					end)
-				end
-			end
-		end
-
-		for _, Tab in ipairs(Rayfield.Main.TabList:GetChildren()) do
-			if Tab.ClassName == "Frame" then
-				Tab:Destroy()
-			end
-		end
-
-		Rayfield:Destroy()
-		WindowFunction = nil
-	end
-
-	function WindowFunction:Destroy()
-		Rayfield:Destroy()
-	end
-
-	function WindowFunction:ModifyTheme(ThemeSettings)
-		if not RyzenHubLibrary.Options.Themeable or (not RyzenHubLibrary.Options.Themeable.Enabled and RyzenHubLibrary.Options.Themeable.Enabled ~= nil) then
-			return
-		end
-
-		local OldTheme = RyzenHubLibrary.Theme
-
-		if RyzenHubLibrary.Options.Themeable then
-			for Option, Color in ThemeSettings do -- Loop through all of the options provided, and set them
-				if RyzenHubLibrary.Options.Themeable[Option] == false then
-					return
-				end
-				if RyzenHubLibrary.Theme.Default[Option] then
-					if RyzenHubLibrary.Options.Themeable[Option] ~= nil then
-						RyzenHubLibrary.Options.Themeable[Option] = Color
-					end
-
-					RyzenHubLibrary.Theme.Default[Option] = Color
-				end
-			end
-		end
-
-		for _, Element in ipairs(RyzenHubLibrary.Elements) do
-			if Element.Type ~= "Toggle" and Element.ColorConfig ~= false then
-				pcall(function()
-					local Name, Transparency = Element.Name, (Element.Transparency or 0)
-					Element.BackgroundColor3 = ElementEnabled("ElementBackground") and GetOptionValue("ElementBackground") or OldTheme.ElementBackground
-					Element.BackgroundTransparency = Transparency
-					Element.UIStroke.Color = ElementEnabled("ElementStroke") and GetOptionValue("ElementStroke") or OldTheme.ElementStroke
-				end)
-			end
-		end
-
-		pcall(function()
-			Rayfield.Main.BackgroundColor3 = GetOptionValue("Background")
-			Rayfield.Main.Topbar.BackgroundColor3 = GetOptionValue("Topbar")
-			Rayfield.Main.Topbar.CornerRepair.BackgroundColor3 = GetOptionValue("Topbar")
-			Rayfield.Main.Shadow.Image.ImageColor3 = GetOptionValue("Shadow")
-
-			Rayfield.Main.Topbar.Line.BackgroundColor3 = GetOptionValue("Topbar")
-			Rayfield.Main.Topbar.TopbarTitle.TextColor3 = GetOptionValue("TextColor")
-			Rayfield.Main.Shadow.Image.ImageTransparency = 0.4
-
-			Rayfield.Main.Topbar.Divider.BackgroundColor3 = GetOptionValue("Topbar")
-
-			Rayfield.Main.Topbar.TopbarTitle.TextColor3 = GetOptionValue("TextColor")
-			Rayfield.Main.Topbar.TopbarTitle.TextTransparency = 0
-
-			Rayfield.Main.Topbar.Hide.ImageColor3 = GetOptionValue("TextColor")
-			Rayfield.Main.Topbar.Hide.ImageTransparency = 0
-
-			Rayfield.Main.Topbar.Minimize.ImageColor3 = GetOptionValue("TextColor")
-			Rayfield.Main.Topbar.Minimize.ImageTransparency = 0
-		end)
-
-		for _, TabButton in ipairs(Rayfield.Main.TabList:GetChildren()) do
-			if TabButton.ClassName == "Frame" and TabButton.Name ~= "Placeholder" then
-				pcall(function()
-					if TabButton.Background.UIStroke and TabButton.Background.InputBegin then
-						if not TabButton.Background.Size == UDim2.fromOffset(0, 30) then
-							TabButton.Background.Size = UDim2.fromOffset(0, 30)
-							TabButton.Position = Rayfield.Main.TabList.Placeholder.Position
-						end
-						TabButton.Visible = true
-						TabButton.Background.BackgroundColor3 = GetOptionValue("TabBackground") or OldTheme.TabBackground
-						TabButton.Title.TextColor3 = GetOptionValue("TabTextColor") or OldTheme.TabTextColor
-						TabButton.Background.UIStroke.Color = GetOptionValue("TabStroke") or OldTheme.TabStroke
-						TabButton.Background.Size = UDim2.fromOffset(120, 30)
-						TabButton.Background.UIStroke.Transparency = 0
-					else
-						TabButton.TabButton.UIStroke.Transparency = 0
-						TabButton.TabButton.Title.TextTransparency = 0
-						TabButton.TabButton.Size = UDim2.fromOffset(120, 30)
-						TabButton.TabButton.Position = UDim2.fromOffset(0,0)
-						TabButton.TabButton.Visible = true
-						TabButton.Size = UDim2.fromOffset(120, 30)
-						TabButton.Position = Rayfield.Main.TabList.Placeholder.Position
-						TabButton.TabButton.BackgroundColor3 = GetOptionValue("TabBackground") or OldTheme.TabBackground
-						TabButton.Title.TextColor3 = GetOptionValue("TabTextColor") or OldTheme.TabTextColor
-						TabButton.TabButton.UIStroke.Color = GetOptionValue("TabStroke") or OldTheme.TabStroke
-					end
-				end)
-			end
-		end
-	end
-
-	local minimizeKeybind = Settings.MinimizeKeybind or Enum.KeyCode.LeftControl
-	local guiHidden = false
-
-	UserInputService.InputBegan:Connect(function(input)
-		if input.KeyCode == Enum.KeyCode[minimizeKeybind.Name] then
-			guiHidden = not guiHidden
-
-			if guiHidden then
-				TweenService:Create(Rayfield.Main, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Size = UDim2.fromOffset(50, 25)}):Play()
-			else
-				TweenService:Create(Rayfield.Main, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Size = UDim2.fromOffset(500, 444)}):Play()
-			end
+			task.wait(0.5)
+			RyzenHub.Main.Notice.Visible = false
 		end
 	end)
 
-	if Settings.MinimizeKey then
-		minimizeKeybind = Settings.MinimizeKey
-	end
-
-	local Window = {}
-
-	function Window:CreateTab(Settings)
-		assert(Settings, "To create a tab, you need to pass a table.")
-		assert(Settings.Name, "To create a tab, you need to pass a table with a Name field.")
-
-		local Tab = RyzenHubLibrary.Elements.Template:Clone()
-		Tab.Name = Settings.Name
-		Tab.Title.Text = Settings.Name
-		Tab.Visible = false
-
-		Tab.Parent = Rayfield.Main.TabList
-		Tab.TabButton.Icon.Image = "rbxassetid://"..(Settings.Icon or "4483345998")
-		Tab.TabButton.Icon.ImageTransparency = 0.5
-
-		Tab.BackgroundColor3 = RyzenHubLibrary.Theme.Default.Background
-
-		Tab.Title.TextColor3 = RyzenHubLibrary.Theme.Default.TabTextColor
-
-		Tab.TabButton.UIStroke.Color = RyzenHubLibrary.Theme.Default.TabStroke
-		Tab.TabButton.UIStroke.Transparency = 0.5
-
-		Tab.TabButton.Title.TextColor3 = RyzenHubLibrary.Theme.Default.TabTextColor
-
-		local TabButtonLabel = Tab.TabButton.Title
-
-		local TabTitle = Tab.Title
-
-		TabButtonLabel.TextColor3 = RyzenHubLibrary.Theme.Default.TextColor
-		TabButtonLabel.TextTransparency = 0
-		Tab.TabButton.BackgroundColor3 = RyzenHubLibrary.Theme.Default.TabBackground
-
-		Tab.TabButton.Icon.ImageTransparency = 0
-		Tab.TabButton.Icon.ImageColor3 = RyzenHubLibrary.Theme.Default.TextColor
-
-		Tab.TabButton.Size = UDim2.fromOffset(120, 30)
-		Tab.TabButton.Visible = true
-
-		-- We need to add 40 pixles to the current X, then we add 15 for the size of each element
-		local CurrentTabPositionHorizontal = #Rayfield.Main.TabList:GetChildren() - 2 + UISettingsPadding
-
-		Tab.TabButton.Position = UDim2.fromOffset(CurrentTabPositionHorizontal,0)
-		Tab.Position = UDim2.fromOffset(Tab.TabButton.Position.X.Offset,70)
-
-		if ElementEnabled("TabBackground") then
-			Tab.TabButton.BackgroundColor3 = GetOptionValue("TabBackground")
-		end
-
-		if ElementEnabled("TabStroke") then
-			Tab.TabButton.UIStroke.Color = GetOptionValue("TabStroke")
-		end
-
-		if ElementEnabled("TabTextColor") then
-			Tab.TabButton.Title.TextColor3 = GetOptionValue("TabTextColor")
-		end
-
-		if Settings.CurrentTab == true then
-			TweenService:Create(Tab.TabButton, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {BackgroundTransparency = 0, UIStrokeTransparency = 0}):Play()
-			TweenService:Create(Tab.TabButton.Title, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {TextTransparency = 0}):Play()
-			TweenService:Create(Tab.TabButton.Icon, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {ImageTransparency = 0}):Play()
-
-			Tab.Visible = true
-			TabTitle.TextTransparency = 0
-			RyzenHubLibrary.CurrentTab = Tab
-		else
-			TweenService:Create(Tab.TabButton, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.75, UIStrokeTransparency = 0.25}):Play()
-			TweenService:Create(Tab.TabButton.Title, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {TextTransparency = 0.2}):Play()
-			TweenService:Create(Tab.TabButton.Icon, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {ImageTransparency = 0.2}):Play()
-
-			Tab.Visible = false
-			TabTitle.TextTransparency = 1
-		end
-
-		Tab.Interact.MouseEnter:Connect(function()
-			if RyzenHubLibrary.CurrentTab.Name ~= Tab.Name then
-				TweenService:Create(Tab.TabButton, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.3, UIStrokeTransparency = 0.25}):Play()
-				TweenService:Create(Tab.TabButton.Title, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {TextTransparency = 0.2}):Play()
-				TweenService:Create(Tab.TabButton.Icon, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {ImageTransparency = 0.2}):Play()
-			end
-		end)
-
-		Tab.Interact.MouseLeave:Connect(function()
-			if RyzenHubLibrary.CurrentTab.Name ~= Tab.Name then
-				TweenService:Create(Tab.TabButton, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.75, UIStrokeTransparency = 0.25}):Play()
-				TweenService:Create(Tab.TabButton.Title, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {TextTransparency = 0.2}):Play()
-				TweenService:Create(Tab.TabButton.Icon, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {ImageTransparency = 0.2}):Play()
-			end
-		end)
-
-		Tab.Interact.MouseButton1Click:Connect(function()
-			if RyzenHubLibrary.CurrentTab.Name ~= Tab.Name then
-				for _, OtherTab in ipairs(Rayfield.Main.TabList:GetChildren()) do
-					if OtherTab.Name ~= "Template" and OtherTab.ClassName == "Frame" and OtherTab ~= Tab and OtherTab.Visible then
-						OtherTab.Visible = false
-						OtherTab.Title.TextTransparency = 1
-						TweenService:Create(OtherTab.TabButton, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.75, UIStrokeTransparency = 0.25}):Play()
-						TweenService:Create(OtherTab.TabButton.Title, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {TextTransparency = 0.2}):Play()
-						TweenService:Create(OtherTab.TabButton.Icon, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {ImageTransparency = 0.2}):Play()
-					end
-				end
-				Tab.Visible = true
-				TabTitle.TextTransparency = 0
-				TweenService:Create(Tab.TabButton, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {BackgroundTransparency = 0, UIStrokeTransparency = 0}):Play()
-				TweenService:Create(Tab.TabButton.Title, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {TextTransparency = 0}):Play()
-				TweenService:Create(Tab.TabButton.Icon, TweenInfo.new(0.11, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {ImageTransparency = 0}):Play()
-				RyzenHubLibrary.CurrentTab = Tab
-			end
-		end)
-
-		local TabFunctions = {}
-
-		function TabFunctions:CreateSection(Settings)
-			assert(Settings, "To create a section, you need to pass a table.")
-			assert(Settings.Name, "To create a section, you need to pass a table with a Name field.")
-
-			local Section = RyzenHubLibrary.Elements.Template.SectionTemplate:Clone()
-			Section.Visible = true
-			Section.Parent = Tab.Container
-
-			Section.SectionTitle.Text = Settings.Name
-
-			Section.SectionTitle.TextColor3 = GetOptionValue("TextColor")
-			Section.SectionTitle.TextTransparency = 0
-
-			Section.SectionBackground.BackgroundColor3 = GetOptionValue("Background")
-			Section.SectionBackground.BackgroundTransparency = 0.7
-
-			Section.UIStroke.Color = GetOptionValue("ElementStroke")
-			Section.UIStroke.Transparency = 0
-
-			Section.Line.BackgroundColor3 = GetOptionValue("ElementStroke")
-			Section.Line.Transparency = 0
-
-			local function FitSizePadding(ListLayoutPadding)
-				Section.Size = UDim2.new(1, 0, 0, Section.UIListLayout.AbsoluteContentSize.Y + ListLayoutPadding)
-			end
-
-			FitSizePadding(35)
-
-			Section.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-				FitSizePadding(35)
-			end)
-
-			local SectionFunction = {}
-
-			for _, Element in ipairs(RyzenHubLibrary.Elements) do
-				for ElementName, ElementSettings in pairs(Element) do
-					local ElementModule = require(ElementSettings.Module)
-
-					local NewElement = {}
-
-					NewElement = ElementModule(RyzenHubLibrary, Section.Container, ElementSettings)
-					RyzenHubLibrary.Elements[ElementName] = NewElement
-				end
-			end
-
-			return SectionFunction
-		end
-
-		return TabFunctions
-	end
-
-	return Window
-end
-
-task.delay(4, function()
-	RyzenHubLibrary.LoadConfiguration()
-	if Main:FindFirstChild('Notice') and Main.Notice.Visible then
-		TweenService:Create(Main.Notice, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 100, 0, 25), Position = UDim2.new(0.5, 0, 0, -100), BackgroundTransparency = 1}):Play()
-		TweenService:Create(Main.Notice.Title, TweenInfo.new(0.3, Enum.EasingStyle.Exponential), {TextTransparency = 1}):Play()
-
-		task.wait(0.5)
-		Main.Notice.Visible = false
-	end
-end)
-
-return RyzenHubLibrary
+	return RyzenHubLibrary
